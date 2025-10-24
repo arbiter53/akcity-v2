@@ -139,15 +139,15 @@ if [ ! -f ".env" ]; then
     cat > .env << EOF
 # MongoDB
 MONGO_ROOT_USERNAME=admin
-MONGO_ROOT_PASSWORD=$(openssl rand -base64 32)
+MONGO_ROOT_PASSWORD=$(openssl rand -hex 32)
 MONGO_DATABASE=akcity
 
 # Redis
-REDIS_PASSWORD=$(openssl rand -base64 32)
+REDIS_PASSWORD=$(openssl rand -hex 32)
 
 # JWT
-JWT_SECRET=$(openssl rand -base64 64)
-JWT_REFRESH_SECRET=$(openssl rand -base64 64)
+JWT_SECRET=$(openssl rand -hex 64)
+JWT_REFRESH_SECRET=$(openssl rand -hex 64)
 
 # API
 API_PREFIX=/api
@@ -170,10 +170,10 @@ BCRYPT_ROUNDS=12
 LOG_LEVEL=info
 
 # Webhook
-WEBHOOK_SECRET=$(openssl rand -base64 32)
+WEBHOOK_SECRET=$(openssl rand -hex 32)
 
 # Grafana
-GRAFANA_ADMIN_PASSWORD=$(openssl rand -base64 16)
+GRAFANA_ADMIN_PASSWORD=$(openssl rand -hex 16)
 EOF
     log "Environment dosyası oluşturuldu"
 else
