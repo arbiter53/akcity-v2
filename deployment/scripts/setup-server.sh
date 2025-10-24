@@ -101,6 +101,13 @@ if [ ! -f ~/.ssh/id_rsa ]; then
     info "ssh-keygen -t rsa -b 4096 -C 'your_email@example.com'"
     info "cat ~/.ssh/id_rsa.pub"
     info "Bu key'i GitHub'a ekleyin"
+else
+    log "SSH key mevcut, GitHub erişimi kontrol ediliyor..."
+    if ssh -T git@github.com -o StrictHostKeyChecking=no 2>&1 | grep -q "successfully authenticated"; then
+        log "✅ GitHub SSH erişimi başarılı"
+    else
+        warning "⚠️ GitHub SSH erişimi başarısız, key'i kontrol edin"
+    fi
 fi
 
 # Firewall yapılandırması
