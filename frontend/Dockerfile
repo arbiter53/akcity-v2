@@ -19,36 +19,20 @@ COPY . .
 EXPOSE 3000
 CMD ["npm", "run", "dev"]
 
-# Build stage
-FROM base AS builder
+# Production stage
+FROM base AS runner
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
 
-# Build the application
-RUN npm run build
-
-# Production stage with Nginx
-FROM nginx:alpine AS runner
-
-# Copy built application
-COPY --from=builder /app/dist /usr/share/nginx/html
-
-# Copy Nginx configuration
-COPY nginx.conf /etc/nginx/nginx.conf
+# Copy source code and dependencies
+COPY --from=deps --chown=nodejs:nodejs /app/node_modules ./node_modules
+COPY --chown=nodejs:nodejs . .
 
 # Create non-root user
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001
 
 # Set proper permissions
-RUN chown -R nextjs:nodejs /usr/share/nginx/html
-RUN chown -R nextjs:nodejs /var/cache/nginx
-RUN chown -R nextjs:nodejs /var/log/nginx
-RUN chown -R nextjs:nodejs /etc/nginx/conf.d
-RUN touch /var/run/nginx.pid
-RUN chown -R nextjs:nodejs /var/run/nginx.pid
+RUN chown -R nextjs:nodejs /app
 
 # Switch to non-root user
 USER nextjs
@@ -60,5 +44,5 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
 # Expose port
 EXPOSE 3000
 
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Start development server
+CMD ["npm", "run", "dev"]
