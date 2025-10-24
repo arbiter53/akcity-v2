@@ -1,18 +1,33 @@
-FROM node:18-alpine
+# Build stage
+FROM node:18-alpine AS builder
 
 WORKDIR /app
 
 # Package files'ları kopyala
 COPY package*.json ./
 
-# Dependencies'leri yükle
-RUN npm install --omit=dev
+# Tüm dependencies'leri yükle (build için)
+RUN npm install
 
 # Source code'u kopyala
 COPY . .
 
 # TypeScript'i build et
 RUN npm run build
+
+# Production stage
+FROM node:18-alpine AS runner
+
+WORKDIR /app
+
+# Package files'ları kopyala
+COPY package*.json ./
+
+# Sadece production dependencies'leri yükle
+RUN npm install --omit=dev
+
+# Build edilmiş kodu kopyala
+COPY --from=builder /app/dist ./dist
 
 # Port'u expose et
 EXPOSE 3001
