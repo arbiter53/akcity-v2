@@ -132,16 +132,6 @@ log "Proje dizini hazırlanıyor..."
 mkdir -p /opt/akcity
 cd /opt/akcity
 
-# Git repository klonlama (eğer yoksa)
-if [ ! -d "akcity-v2" ]; then
-    log "Repository klonlanıyor..."
-    git clone https://github.com/arbiter53/akcity-v2.git
-    cd akcity-v2
-else
-    log "Repository zaten mevcut, güncelleniyor..."
-    cd akcity-v2
-    git pull origin main
-fi
 
 # Environment dosyası oluşturma
 log "Environment dosyası oluşturuluyor..."
