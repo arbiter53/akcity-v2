@@ -8,16 +8,7 @@ WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
-RUN npm install --only=production && npm cache clean --force
-
-# Development stage
-FROM base AS dev
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-EXPOSE 5000
-CMD ["npm", "run", "dev"]
+RUN npm install && npm cache clean --force
 
 # Production stage
 FROM base AS runner
