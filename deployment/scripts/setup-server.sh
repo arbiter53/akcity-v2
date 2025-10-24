@@ -135,6 +135,7 @@ cd /opt/akcity
 
 # Environment dosyası oluşturma
 log "Environment dosyası oluşturuluyor..."
+cd /opt/akcity/akcity-v2
 if [ ! -f ".env" ]; then
     cat > .env << EOF
 # MongoDB
@@ -182,6 +183,7 @@ fi
 
 # Docker servislerini başlatma
 log "Docker servisleri başlatılıyor..."
+cd /opt/akcity/akcity-v2
 docker-compose -f docker-compose.prod.yml down --remove-orphans
 docker-compose -f docker-compose.prod.yml pull
 docker-compose -f docker-compose.prod.yml up -d
