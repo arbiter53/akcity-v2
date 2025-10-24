@@ -132,6 +132,7 @@ log "Proje dizini hazırlanıyor..."
 mkdir -p /opt/akcity
 cd /opt/akcity
 
+
 # Git repository klonlama
 log "Repository klonlanıyor..."
 git clone https://github.com/arbiter53/akcity-v2.git

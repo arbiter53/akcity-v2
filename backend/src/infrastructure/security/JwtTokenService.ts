@@ -25,7 +25,7 @@ export class JwtTokenService implements ITokenService {
         expiresIn: this.accessTokenExpiry,
         issuer: 'akcity-api',
         audience: 'akcity-client'
-      });
+      } as jwt.SignOptions);
     } catch (error) {
       throw new Error('Failed to generate access token');
     }
@@ -37,7 +37,7 @@ export class JwtTokenService implements ITokenService {
         expiresIn: this.refreshTokenExpiry,
         issuer: 'akcity-api',
         audience: 'akcity-client'
-      });
+      } as jwt.SignOptions);
     } catch (error) {
       throw new Error('Failed to generate refresh token');
     }
