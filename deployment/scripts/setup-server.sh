@@ -95,19 +95,17 @@ log "Git yapılandırılıyor..."
 git config --global init.defaultBranch main
 git config --global pull.rebase false
 
-# SSH key kontrolü
-if [ ! -f ~/.ssh/id_rsa ]; then
-    warning "SSH key bulunamadı. GitHub'a erişim için SSH key oluşturun:"
-    info "ssh-keygen -t rsa -b 4096 -C 'your_email@example.com'"
-    info "cat ~/.ssh/id_rsa.pub"
-    info "Bu key'i GitHub'a ekleyin"
+# GitHub repository güncelleme
+log "GitHub repository güncelleniyor..."
+if [ -d "akcity-v2" ]; then
+    cd akcity-v2
+    git pull origin main
+    log "✅ Repository güncellendi"
+    cd ..
 else
-    log "SSH key mevcut, GitHub erişimi kontrol ediliyor..."
-    if ssh -T git@github.com -o StrictHostKeyChecking=no 2>&1 | grep -q "successfully authenticated"; then
-        log "✅ GitHub SSH erişimi başarılı"
-    else
-        warning "⚠️ GitHub SSH erişimi başarısız, key'i kontrol edin"
-    fi
+    log "Repository klonlanıyor..."
+    git clone https://github.com/arbiter53/akcity-v2.git
+    log "✅ Repository klonlandı"
 fi
 
 # Firewall yapılandırması
