@@ -6,7 +6,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Dependencies'leri yükle
-RUN npm ci --only=production
+RUN npm install --omit=dev
 
 # Source code'u kopyala
 COPY . .
