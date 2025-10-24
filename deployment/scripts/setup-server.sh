@@ -90,23 +90,6 @@ else
     log "Node.js zaten kurulu"
 fi
 
-# Git yapılandırması
-log "Git yapılandırılıyor..."
-git config --global init.defaultBranch main
-git config --global pull.rebase false
-
-# GitHub repository güncelleme
-log "GitHub repository güncelleniyor..."
-if [ -d "akcity-v2" ]; then
-    cd akcity-v2
-    git pull origin main
-    log "✅ Repository güncellendi"
-    cd ..
-else
-    log "Repository klonlanıyor..."
-    git clone https://github.com/arbiter53/akcity-v2.git
-    log "✅ Repository klonlandı"
-fi
 
 # Firewall yapılandırması
 log "Firewall yapılandırılıyor..."
