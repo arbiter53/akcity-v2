@@ -232,12 +232,55 @@ else
     warning "⚠️ Prometheus henüz hazır değil"
 fi
 
+# Domain yapılandırması
+log "Domain yapılandırılıyor..."
+if [ ! -f "/etc/nginx/sites-available/panel.akcity.net" ]; then
+    cat > /etc/nginx/sites-available/panel.akcity.net << EOF
+server {
+    listen 80;
+    server_name panel.akcity.net;
+    
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+    }
+    
+    location /api/ {
+        proxy_pass http://127.0.0.1:5000;
+        proxy_http_version 1.1;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+    }
+    
+    location /webhook {
+        proxy_pass http://127.0.0.1:3002;
+        proxy_http_version 1.1;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+    }
+}
+EOF
+    
+    ln -sf /etc/nginx/sites-available/panel.akcity.net /etc/nginx/sites-enabled/
+    rm -f /etc/nginx/sites-enabled/default
+    nginx -t && systemctl reload nginx
+    log "Domain yapılandırması tamamlandı"
+fi
+
 # Sistem bilgileri
 log "Kurulum tamamlandı!"
 info "=== SİSTEM BİLGİLERİ ==="
-info "Ana Site: http://$(curl -s ifconfig.me)"
-info "Grafana: http://$(curl -s ifconfig.me):3001"
-info "Prometheus: http://$(curl -s ifconfig.me):9090"
+info "Ana Site: http://panel.akcity.net"
+info "Grafana: http://panel.akcity.net:3001"
+info "Prometheus: http://panel.akcity.net:9090"
 info "Proje Dizini: /opt/akcity/akcity-v2"
 info "Environment: /opt/akcity/akcity-v2/.env"
 info "========================="
