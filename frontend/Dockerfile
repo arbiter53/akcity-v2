@@ -8,13 +8,13 @@ WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 
 # Development stage
 FROM base AS dev
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 COPY . .
 EXPOSE 3000
 CMD ["npm", "run", "dev"]
@@ -23,7 +23,7 @@ CMD ["npm", "run", "dev"]
 FROM base AS builder
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 COPY . .
 
 # Build the application

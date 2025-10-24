@@ -202,6 +202,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - .:/workspace
+      - ~/.ssh:/root/.ssh:ro
     working_dir: /workspace
     networks:
       - akcity-network

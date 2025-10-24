@@ -28,7 +28,7 @@ async function deploy() {
   try {
     console.log('🚀 Deployment başlatılıyor...');
     
-    // Git pull
+    // Git pull (SSH ile)
     await execAsync('git pull origin main');
     console.log('✅ Git pull tamamlandı');
     
