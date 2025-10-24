@@ -19,16 +19,6 @@ COPY . .
 EXPOSE 5000
 CMD ["npm", "run", "dev"]
 
-# Build stage
-FROM base AS builder
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-
-# Build the application
-RUN npm run build
-
 # Production stage
 FROM base AS runner
 WORKDIR /app
@@ -37,10 +27,9 @@ WORKDIR /app
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nodejs
 
-# Copy built application
-COPY --from=builder --chown=nodejs:nodejs /app/dist ./dist
+# Copy source code and dependencies
 COPY --from=deps --chown=nodejs:nodejs /app/node_modules ./node_modules
-COPY --from=builder --chown=nodejs:nodejs /app/package*.json ./
+COPY --chown=nodejs:nodejs . .
 
 # Create logs directory
 RUN mkdir -p logs && chown nodejs:nodejs logs
@@ -55,5 +44,5 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
 # Expose port
 EXPOSE 5000
 
-# Start the application
-CMD ["npm", "start"]
+# Start the application (development mode - no build needed)
+CMD ["npm", "run", "dev"]
