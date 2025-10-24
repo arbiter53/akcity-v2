@@ -73,6 +73,8 @@ services:
       LOG_LEVEL: ${LOG_LEVEL:-info}
       RATE_LIMIT_MAX_REQUESTS: ${RATE_LIMIT_MAX_REQUESTS:-100}
       AUTH_RATE_LIMIT_MAX: ${AUTH_RATE_LIMIT_MAX:-5}
+    ports:
+      - "5000:5000"
     volumes:
       - ./backend/logs:/app/logs
     depends_on:
